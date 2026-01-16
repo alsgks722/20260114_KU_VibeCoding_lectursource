@@ -1,207 +1,65 @@
-"""
-3단계: 입력 위젯
-학습 목표: 사용자로부터 다양한 형태의 입력 받기
-"""
-
 import streamlit as st
-from datetime import datetime, date, time
 
-st.title("🎛️ 입력 위젯 배우기")
+st.set_page_config(page_title="BMI 계산기", page_icon="⚖️", layout="centered")
 
-# ============================================
-# 1. 텍스트 입력
-# ============================================
-st.header("1. 텍스트 입력")
+# 전체 스타일 커스터마이징 (버튼 + 입력창)
+st.markdown("""
+    <style>
+    /* 빨간색 버튼 */
+    div.stButton > button:first-child {
+        background-color: #ff4d4d;
+        color: white;
+    }
+    div.stButton > button:first-child:hover {
+        background-color: #e60000;
+        color: white;
+    }
+""", unsafe_allow_html=True)
 
+st.title("BMI 계산기")
 
-st.subheader("한 줄 입력")
-name = st.text_input(
-    "이름을 입력하세요:",
-    placeholder="홍길동",
-    help="이름을 입력하는 필드입니다"
-)
-if name:
-    st.write(f"입력한 이름: {name}")
+st.write("키(cm)와 몸무게(kg)를 입력한 후 **BMI 계산하기** 버튼을 눌러 주세요.")
 
-email = st.text_input(
-    "이메일:",
-    placeholder="example@email.com",
-    type="default"
-)
-
-password = st.text_input(
-    "비밀번호:",
-    type="password"
-)
-
-st.subheader("여러 줄 입력")
-message = st.text_area(
-    "메시지를 입력하세요:",
-    placeholder="여기에 메시지를 작성하세요...",
-    height=150
-)
-if message:
-    st.info(f"입력한 글자 수: {len(message)}자")
-
-# ============================================
-# 2. 숫자 입력
-# ============================================
-st.divider()
-st.header("2. 숫자 입력")
-
-
-st.subheader("숫자 직접 입력")
-age = st.number_input(
-    "나이:",
-    min_value=0,
-    max_value=120,
-    value=25,
-    step=1
-)
-st.write(f"입력한 나이: {age}세")
-
-price = st.number_input(
-    "가격:",
-    min_value=0.0,
-    value=10000.0,
-    step=1000.0,
-    format="%.2f"
-)
-st.write(f"₩{price:,.0f}")
-
-st.subheader("슬라이더")
-temperature = st.slider(
-    "온도 (°C):",
-    min_value=-10,
-    max_value=40,
-    value=20,
-    step=1
-)
-st.write(f"현재 온도: {temperature}°C")
-
-# 범위 슬라이더
-price_range = st.slider(
-    "가격 범위:",
-    min_value=0,
-    max_value=100000,
-    value=(20000, 50000),
-    step=5000,
-    format="₩%d"
-)
-st.write(f"₩{price_range[0]:,} ~ ₩{price_range[1]:,}")
-
-# ============================================
-# 3. 선택 위젯
-# ============================================
-st.divider()
-st.header("3. 선택 위젯")
-
-
-st.subheader("드롭다운")
-city = st.selectbox(
-    "도시를 선택하세요:",
-    ["서울", "부산", "대구", "인천", "광주", "대전", "울산"],
-    index=0
-)
-st.write(f"선택한 도시: {city}")
-
-st.subheader("라디오 버튼")
-gender = st.radio(
-    "성별:",
-    ["남성", "여성", "기타"],
-    horizontal=True
-)
-st.write(f"선택: {gender}")
-
-st.subheader("다중 선택")
-hobbies = st.multiselect(
-    "취미를 선택하세요 (복수 선택 가능):",
-    ["독서", "운동", "영화", "음악", "게임", "요리", "여행"],
-    default=["독서", "운동"]
-)
-if hobbies:
-    st.write(f"선택한 취미: {', '.join(hobbies)}")
-
-st.subheader("선택형 슬라이더")
-rating = st.select_slider(
-    "만족도:",
-    options=["매우 불만", "불만", "보통", "만족", "매우 만족"],
-    value="보통"
-)
-st.write(f"평가: {rating}")
-
-# ============================================
-# 4. 체크박스와 토글
-# ============================================
-st.divider()
-st.header("4. 체크박스와 토글")
-
-
-agree = st.checkbox("이용약관에 동의합니다")
-subscribe = st.checkbox("뉴스레터 구독", value=True)
-
-if agree and subscribe:
-    st.success("모두 동의하셨습니다!")
-
-show_details = st.toggle("상세 정보 보기")
-
-if show_details:
-    st.info("📌 여기에 상세 정보가 표시됩니다.")
-
-# ============================================
-# 5. 버튼
-# ============================================
-st.divider()
-st.header("5. 버튼")
-
-if st.button("일반 버튼", use_container_width=True):
-    st.write("버튼이 클릭되었습니다!")
-
-if st.button("Primary 버튼", type="primary", use_container_width=True):
-    st.balloons()
-
-if st.button("🎨 아이콘 버튼", use_container_width=True):
-    st.snow()
-
-# ============================================
-# 6. 날짜와 시간
-# ============================================
-st.divider()
-st.header("6. 날짜와 시간")
-
-
-selected_date = st.date_input(
-    "날짜 선택:",
-    value=date.today()
-)
-st.write(f"선택한 날짜: {selected_date}")
-
-selected_time = st.time_input(
-    "시간 선택:",
-    value=time(9, 0)
-)
-st.write(f"선택한 시간: {selected_time}")
-
-# ============================================
-# 7. 파일 업로드
-# ============================================
-st.divider()
-st.header("7. 파일 업로드")
-
-uploaded_file = st.file_uploader(
-    "파일을 선택하세요",
-    type=['txt', 'csv', 'pdf', 'png', 'jpg'],
-    help="txt, csv, pdf, png, jpg 파일만 업로드 가능합니다"
+# 숫자 입력 (세로 배치)
+height = st.number_input(
+    "키 (cm)",
+    min_value=100.0,
+    max_value=250.0,
+    value=170.0,
+    step=0.1
 )
 
-if uploaded_file is not None:
-    st.success(f"✅ 파일 업로드 성공: {uploaded_file.name}")
-    st.write(f"파일 크기: {uploaded_file.size} bytes")
-    st.write(f"파일 타입: {uploaded_file.type}")
-    
-    # 이미지 파일인 경우 표시
-    if uploaded_file.type.startswith('image'):
-        st.image(uploaded_file, caption="업로드된 이미지")
+weight = st.number_input(
+    "몸무게 (kg)",
+    min_value=20.0,
+    max_value=200.0,
+    value=65.0,
+    step=0.1
+)
+
+# 계산 버튼
+if st.button("BMI 계산하기"):
+    if height <= 0:
+        st.error("키는 0보다 커야 합니다.")
+    else:
+        height_m = height / 100
+        bmi = weight / (height_m ** 2)
+
+        if bmi < 18.5:
+            status = "저체중"
+        elif 18.5 <= bmi <= 22.9:
+            status = "정상"
+        elif 23 <= bmi <= 24.9:
+            status = "과체중"
+        else:
+            status = "비만"
+
+        st.subheader("결과")
+        st.write(f"**BMI:** {bmi:.2f}")
+        st.write(f"**판정:** {status}")
+else:
+    st.info("키와 몸무게를 입력한 뒤 **BMI 계산하기** 버튼을 눌러 BMI를 확인하세요.")
+
 
 # ============================================
 # 실습 과제
